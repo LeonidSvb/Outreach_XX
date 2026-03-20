@@ -1,0 +1,15 @@
+{
+  "name": "outreach-sync",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "sync": "node src/index.js",
+    "sync:campaigns": "node src/index.js campaigns",
+    "sync:leads": "node src/index.js leads",
+    "sync:accounts": "node src/index.js accounts",
+    "sync:stats": "node src/index.js stats"
+  },
+  "dependencies": {
+    "pg": "^8.11.0"
+  }
+}

@@ -200,3 +200,8 @@ FROM campaigns
 WHERE deleted_from_source_at IS NULL
   AND status IN ('ACTIVE', 'PAUSED')
 ORDER BY remaining_to_contact DESC;
+
+-- 11. Performance by tag (reply rate, positive rate, auto reply rate, bounce rate)
+-- Requires: tags, account_tags tables
+CREATE OR REPLACE VIEW v_performance_by_tag AS ...
+-- See full definition in db/views.sql on VPS
