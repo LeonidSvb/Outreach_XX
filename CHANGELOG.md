@@ -6,14 +6,26 @@
 
 ## [Unreleased]
 
-### Next Session Plan
-**Goal:** Configure daily report cron via N8N MCP
+---
 
-**Priority Tasks:**
-1. Test N8N MCP connection (restart Claude Code first)
-2. Create + execute daily report workflow via MCP
-3. Set up daily schedule (8:00 AM) in N8N
-4. Push unpushed commit to GitHub
+## [0.5.0] - 2026-03-20 - N8N Migration SQLite → PostgreSQL
+
+### Changed
+- **N8N** migrated from SQLite to PostgreSQL (same `postgres` container, database `n8n`)
+- `docker-compose.yml` — added `N8N_ENCRYPTION_KEY` env var to n8n service
+- `/root/.env` on VPS — added `N8N_ENCRYPTION_KEY=SgdKhq8TQ0TpLZ7QiH7mRqsO1l9EI4BZ`, corrected `POSTGRES_PASSWORD`
+
+### Added
+- `.env` — added `VPS_HOST`, `POSTGRES_HOST`, `N8N_URL`, `METABASE_URL`
+
+### Fixed
+- N8N owner account recreated with original UUID (`441afe9c-d085-4951-9606-a1fc7b8a7fdc`) to preserve workflow ownership
+- 30 workflows and 25 credentials imported from SQLite export
+
+### Notes
+- SQLite file (1.4GB) preserved at `n8n_data` volume — not deleted yet
+- N8N login: `leo@systemhustle.com`
+- Outreach DB (postgres) is separate from N8N DB — no conflict
 
 ---
 
