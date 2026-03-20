@@ -203,5 +203,31 @@ ORDER BY remaining_to_contact DESC;
 
 -- 11. Performance by tag (reply rate, positive rate, auto reply rate, bounce rate)
 -- Requires: tags, account_tags tables
-CREATE OR REPLACE VIEW v_performance_by_tag AS ...
--- See full definition in db/views.sql on VPS
+-- auto_reply_rate_pct = OOO+AUTOMATIC_REPLY / contacted (not / replied)
+CREATE OR REPLACE VIEW v_performance_by_tag AS
+SELECT
+  t.name AS tag_name,
+  t.description AS tag_description,
+  t.color AS tag_color,
+  COUNT(DISTINCT ea.id) AS accounts_in_tag,
+  COUNT(DISTINCT l.id) AS total_leads,
+  COUNT(DISTINCT l.id) FILTER (WHERE l.status != 'NOT_CONTACTED') AS contacted_leads,
+  COUNT(DISTINCT l.id) FILTER (WHERE l.status = 'REPLIED') AS replied_leads,
+  COUNT(DISTINCT l.id) FILTER (WHERE l.label = 'INTERESTED') AS interested_leads,
+  COUNT(DISTINCT l.id) FILTER (WHERE l.label IN ('OUT_OF_OFFICE', 'AUTOMATIC_REPLY')) AS auto_reply_leads,
+  COUNT(DISTINCT l.id) FILTER (WHERE l.status = 'BOUNCED') AS bounced_leads,
+  ROUND(COUNT(DISTINCT l.id) FILTER (WHERE l.status = 'REPLIED')::numeric /
+    NULLIF(COUNT(DISTINCT l.id) FILTER (WHERE l.status != 'NOT_CONTACTED'), 0) * 100, 2) AS reply_rate_pct,
+  ROUND(COUNT(DISTINCT l.id) FILTER (WHERE l.label = 'INTERESTED')::numeric /
+    NULLIF(COUNT(DISTINCT l.id) FILTER (WHERE l.status = 'REPLIED'), 0) * 100, 2) AS positive_of_replies_pct,
+  ROUND(COUNT(DISTINCT l.id) FILTER (WHERE l.label IN ('OUT_OF_OFFICE', 'AUTOMATIC_REPLY'))::numeric /
+    NULLIF(COUNT(DISTINCT l.id) FILTER (WHERE l.status != 'NOT_CONTACTED'), 0) * 100, 2) AS auto_reply_rate_pct,
+  ROUND(COUNT(DISTINCT l.id) FILTER (WHERE l.status = 'BOUNCED')::numeric /
+    NULLIF(COUNT(DISTINCT l.id) FILTER (WHERE l.status != 'NOT_CONTACTED'), 0) * 100, 2) AS bounce_rate_pct
+FROM tags t
+JOIN account_tags at ON t.id::text = at.tag_id::text
+JOIN email_accounts ea ON at.account_id::text = ea.id::text
+LEFT JOIN leads l ON l.email_acc_name = ea.email AND l.deleted_from_source_at IS NULL
+WHERE ea.deleted_from_source_at IS NULL
+GROUP BY t.id, t.name, t.description, t.color
+ORDER BY contacted_leads DESC;

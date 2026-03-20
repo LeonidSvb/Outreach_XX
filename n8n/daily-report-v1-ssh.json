@@ -1,0 +1,124 @@
+{
+  "name": "Outreach Daily Report — v1 SSH Script",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "id": "11111111-1111-1111-1111-111111111101",
+      "name": "Schedule 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "resource": "command",
+        "command": "cd /root/outreach-sync && node src/notify.js report",
+        "options": {}
+      },
+      "id": "11111111-1111-1111-1111-111111111102",
+      "name": "SSH Run Report",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [480, 300],
+      "credentials": {
+        "sshPassword": {
+          "id": "REPLACE_WITH_SSH_CREDENTIAL_ID",
+          "name": "VPS SSH root"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.stderr }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "11111111-1111-1111-1111-111111111103",
+      "name": "Check for Errors",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/botREPLACE_BOT_TOKEN/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"REPLACE_CHAT_ID\",\n  \"text\": \"Report script ERROR:\\n{{ $json.stderr }}\",\n  \"parse_mode\": \"HTML\"\n}",
+        "options": {}
+      },
+      "id": "11111111-1111-1111-1111-111111111104",
+      "name": "Telegram Error Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [960, 200]
+    }
+  ],
+  "connections": {
+    "Schedule 08:00": {
+      "main": [
+        [
+          {
+            "node": "SSH Run Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SSH Run Report": {
+      "main": [
+        [
+          {
+            "node": "Check for Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Errors": {
+      "main": [
+        [
+          {
+            "node": "Telegram Error Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "outreach" }
+  ],
+  "_readme": {
+    "setup": [
+      "1. Create SSH credential in N8N: Credentials → New → SSH",
+      "   Host: 72.61.143.225 | Port: 22 | User: root | Password: (from .env VPS_PASSWORD)",
+      "   Replace REPLACE_WITH_SSH_CREDENTIAL_ID with the new credential ID",
+      "2. In Telegram Error Alert node replace REPLACE_BOT_TOKEN and REPLACE_CHAT_ID",
+      "3. Activate the workflow"
+    ],
+    "how_it_works": "N8N SSHes into VPS and runs the Node.js script. The script queries Postgres, formats the HTML report, and sends it to Telegram directly. N8N only sees stdout/stderr from the command."
+  }
+}
