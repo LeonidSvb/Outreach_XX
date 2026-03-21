@@ -22,7 +22,7 @@ docker exec root-nocodb-1 sed -i \
   /usr/src/app/node_modules/request-filtering-agent/lib/request-filtering-agent.js
 docker restart root-nocodb-1
 ```
-**Внимание:** патч слетает при `docker pull` / пересборке контейнера — нужно повторить.
+Патч применяется автоматически при каждом старте через `/root/nocodb-start.sh`, смонтированный в docker-compose как замена `/usr/src/appEntry/start.sh`. При `docker pull` / пересборке повторять не нужно.
 
 После подключения через UI (Settings → Data Sources → Add Data Source):
 - Connection: выбрать сохранённый `outreach`
