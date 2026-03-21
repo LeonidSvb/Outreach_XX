@@ -1,3 +1,4 @@
+// Full paginated upsert + soft delete for leads (~14k). Preserves deleted leads.
 import { query, logSync } from '../db.js';
 import { getAllLeads } from '../plusvibe.js';
 

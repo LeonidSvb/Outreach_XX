@@ -1,3 +1,4 @@
+// Full upsert + soft delete for campaigns from PlusVibe.
 import { query, logSync } from '../db.js';
 import { getCampaigns } from '../plusvibe.js';
 

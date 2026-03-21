@@ -1,3 +1,4 @@
+// Daily snapshots: campaign_stats (cumulative), warmup_stats, lead_status_counts.
 import { query, logSync } from '../db.js';
 import { getCampaigns, getCampaignStats, getWarmupStats, getLeadStatusCounts } from '../plusvibe.js';
 

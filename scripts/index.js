@@ -1,3 +1,4 @@
+// Sync runner. Usage: node index.js [all|campaigns|accounts|leads|stats|tags|zoho]
 import { syncCampaigns } from './sync/campaigns.js';
 import { syncEmailAccounts } from './sync/email_accounts.js';
 import { syncLeads } from './sync/leads.js';

@@ -1,3 +1,4 @@
+// Full upsert + soft delete for email accounts (196 accounts) + tag assignments.
 import { query, logSync } from '../db.js';
 import { getEmailAccounts } from '../plusvibe.js';
 import { syncAccountTags } from './tags.js';

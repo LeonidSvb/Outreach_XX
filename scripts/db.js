@@ -1,3 +1,4 @@
+// PostgreSQL connection pool, query helper, and sync logger.
 import pg from 'pg';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';

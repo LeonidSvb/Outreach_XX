@@ -1,3 +1,4 @@
+// PlusVibe API client. Rate limit: 5 req/sec — always use 210ms delay in loops.
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 

@@ -1,3 +1,4 @@
+// Notification runner. Usage: node notify.js [report|alerts]
 import { sendDailyReport } from './notifications/daily_report.js';
 import { checkAndSendAlerts } from './notifications/alerts.js';
 import pool from './db.js';

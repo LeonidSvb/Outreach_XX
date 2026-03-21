@@ -1,3 +1,4 @@
+// Per-campaign daily stats. syncYesterdayDailyStats() runs daily; backfillDailyStats() is one-time.
 import { query, logSync } from '../db.js';
 import { getCampaigns, getCampaignStats } from '../plusvibe.js';
 

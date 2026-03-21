@@ -1,3 +1,4 @@
+// Upserts tags list and account→tag assignments from PlusVibe.
 import { query, logSync } from '../db.js';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';

@@ -1,3 +1,4 @@
+// Daily Telegram report: yesterday stats, active campaigns, domains, warmup, lead pipeline.
 import { query } from '../db.js';
 import { sendTelegram } from './telegram.js';
 

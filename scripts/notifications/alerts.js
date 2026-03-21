@@ -1,3 +1,4 @@
+// Proactive alerts: low account health, high bounce rate, sync errors, low utilization.
 import { query } from '../db.js';
 import { sendTelegram } from './telegram.js';
 

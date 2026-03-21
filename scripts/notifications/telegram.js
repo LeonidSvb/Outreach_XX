@@ -1,3 +1,4 @@
+// Telegram Bot API sender. Sends HTML-formatted messages to configured chat.
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 

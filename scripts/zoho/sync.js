@@ -1,3 +1,5 @@
+// Syncs positive reply leads (INTERESTED/MEETING_BOOKED/MEETING_COMPLETED) to Zoho CRM Contacts.
+// One-way. Dedup via zoho_contact_id in leads table + duplicate_check_fields by Email in Zoho.
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import https from 'https';
@@ -49,11 +51,15 @@ async function getAccessToken() {
 
 async function createZohoContact(token, lead) {
   const description = [
+    'Source: PlusVibe',
     'Campaign: ' + (lead.campaign_name || ''),
     'Sending account: ' + (lead.email_acc_name || ''),
     'Label: ' + (lead.label || ''),
+    lead.tags ? 'Tags: ' + lead.tags : null,
+    lead.linkedin_person_url ? 'LinkedIn: ' + lead.linkedin_person_url : null,
+    lead.company_website ? 'Website: ' + lead.company_website : null,
     'PlusVibe ID: ' + lead.id,
-  ].join('\n');
+  ].filter(Boolean).join('\n');
 
   const contact = {
     data: [{
@@ -63,6 +69,8 @@ async function createZohoContact(token, lead) {
       Title: (lead.job_title || '').slice(0, 100),
       Account_Name: lead.company_name || '',
       Phone: lead.phone_number || '',
+      Mailing_City: lead.city || '',
+      Mailing_Country: lead.country || '',
       Lead_Source: 'Cold Email',
       Description: description,
     }],
@@ -83,14 +91,24 @@ export async function syncZoho() {
   console.log('[' + startedAt.toISOString() + '] Starting Zoho sync...');
 
   const { rows: leads } = await pool.query(`
-    SELECT id, email, first_name, last_name, job_title, company_name,
-           phone_number, campaign_name, email_acc_name, label
-    FROM leads
-    WHERE status = 'REPLIED'
-    AND label IN ('INTERESTED', 'MEETING_BOOKED', 'MEETING_COMPLETED')
-    AND zoho_contact_id IS NULL
-    AND deleted_from_source_at IS NULL
-    ORDER BY modified_at DESC
+    SELECT l.id, l.email, l.first_name, l.last_name, l.job_title,
+           l.company_name, l.company_website, l.phone_number,
+           l.linkedin_person_url, l.city, l.country,
+           l.campaign_name, l.email_acc_name, l.label,
+           STRING_AGG(t.name, ', ') as tags
+    FROM leads l
+    LEFT JOIN email_accounts ea ON ea.email = l.email_acc_name AND ea.deleted_from_source_at IS NULL
+    LEFT JOIN account_tags at ON at.account_id = ea.id
+    LEFT JOIN tags t ON t.id = at.tag_id
+    WHERE l.status = 'REPLIED'
+    AND l.label IN ('INTERESTED', 'MEETING_BOOKED', 'MEETING_COMPLETED')
+    AND l.zoho_contact_id IS NULL
+    AND l.deleted_from_source_at IS NULL
+    GROUP BY l.id, l.email, l.first_name, l.last_name, l.job_title,
+             l.company_name, l.company_website, l.phone_number,
+             l.linkedin_person_url, l.city, l.country,
+             l.campaign_name, l.email_acc_name, l.label
+    ORDER BY l.modified_at DESC
   `);
 
   console.log('Found ' + leads.length + ' leads to sync');
