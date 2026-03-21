@@ -16,7 +16,7 @@ const WS = env.PLUSVIBE_WORKSPACE_ID;
 const HEADERS = { 'x-api-key': KEY };
 
 async function fetchEmailsPage(pageTrail = null) {
-  const params = new URLSearchParams({ workspace_id: WS, email_type: 'all', limit: 100 });
+  const params = new URLSearchParams({ workspace_id: WS, email_type: 'all' });
   if (pageTrail) params.set('page_trail', pageTrail);
   const res = await fetch(`${BASE}/unibox/emails?${params}`, { headers: HEADERS });
   if (!res.ok) throw new Error(`Unibox API returned ${res.status}`);
