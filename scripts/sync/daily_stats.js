@@ -1,4 +1,3 @@
-// Per-campaign daily stats. syncYesterdayDailyStats() runs daily; backfillDailyStats() is one-time.
 import { query, logSync } from '../db.js';
 import { getCampaigns, getCampaignStats } from '../plusvibe.js';
 
@@ -38,7 +37,7 @@ async function upsertDailyStat(campaignId, campaignName, date, s) {
 
 export async function backfillDailyStats(fromDate = '2026-01-01') {
   const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-  console.log('Backfilling daily stats from ' + fromDate + ' to ' + yesterday + '...');
+  console.log(`Backfilling daily stats from ${fromDate} to ${yesterday}...`);
 
   const campaigns = await getCampaigns();
   const dates = getDatesInRange(fromDate, yesterday);
@@ -50,7 +49,7 @@ export async function backfillDailyStats(fromDate = '2026-01-01') {
   for (const campaign of campaigns) {
     const campStart = campaign.created_at ? campaign.created_at.split('T')[0] : fromDate;
     const relevantDates = dates.filter(d => d >= campStart);
-    console.log('  ' + campaign.camp_name + ': ' + relevantDates.length + ' days to check');
+    console.log(`  ${campaign.camp_name}: ${relevantDates.length} days to check`);
 
     for (const date of relevantDates) {
       try {
@@ -63,19 +62,19 @@ export async function backfillDailyStats(fromDate = '2026-01-01') {
         inserted++;
       } catch (e) {
         errors++;
-        console.error('    Error ' + campaign.camp_name + ' ' + date + ': ' + e.message);
+        console.error(`    Error ${campaign.camp_name} ${date}: ${e.message}`);
       }
     }
   }
 
-  console.log('Done: ' + inserted + ' inserted, ' + skipped + ' skipped (no activity), ' + errors + ' errors');
+  console.log(`Done: ${inserted} inserted, ${skipped} skipped (no activity), ${errors} errors`);
   return { inserted, skipped, errors };
 }
 
 export async function syncYesterdayDailyStats() {
   const startedAt = new Date();
   const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-  console.log('  Syncing daily stats for ' + yesterday + '...');
+  console.log(`  Syncing daily stats for ${yesterday}...`);
 
   try {
     const campaigns = await getCampaigns();
@@ -92,7 +91,7 @@ export async function syncYesterdayDailyStats() {
     }
 
     await logSync('daily_stats', startedAt, { processed: campaigns.length, upserted, status: 'success' });
-    console.log('  daily_stats: ' + upserted + ' campaigns updated for ' + yesterday);
+    console.log(`  daily_stats: ${upserted} campaigns updated for ${yesterday}`);
   } catch (e) {
     await logSync('daily_stats', startedAt, { status: 'error', error: e.message });
     console.error('  daily_stats sync failed:', e.message);

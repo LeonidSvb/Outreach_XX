@@ -8,6 +8,23 @@
 
 ---
 
+## [0.6.0] - 2026-03-21 - Daily Stats + Metabase Dashboard Foundation
+
+### Added
+- **`db/campaign_stats_daily` table** — daily activity per campaign (not cumulative): `sent_count`, `new_lead_contacted_count`, `replied_count`, `bounced_count`, `positive_reply_count`, `unique_opened_count`, `opportunity_val`; unique constraint on `(campaign_id, stat_date)`
+- **`scripts/sync/daily_stats.js`** — two exports:
+  - `backfillDailyStats(fromDate)` — one-time backfill, calls PlusVibe `/analytics/campaign/stats` per campaign per day, skips days with zero activity
+  - `syncYesterdayDailyStats()` — daily cron function, writes yesterday's activity for all campaigns
+- **Cron** — `30 1 * * *`: `node scripts/index.js daily_stats` (runs after campaign_stats snapshot at 01:00)
+- **`scripts/index.js`** — added `daily_stats` arg and `syncYesterdayDailyStats` import
+
+### Notes
+- Backfill result: 102 rows, 25 campaigns with activity, 2026-01-02 → 2026-03-20
+- `campaign_stats` (cumulative YTD) kept for KPI totals; `campaign_stats_daily` used for time-series charts
+- PlusVibe `/analytics/campaign/stats?start_date=DAY&end_date=DAY` returns period totals (not cumulative)
+
+---
+
 ## [0.6.0] - 2026-03-21 - Zoho CRM Integration
 
 ### Added
