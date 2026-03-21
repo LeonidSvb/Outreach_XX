@@ -58,11 +58,14 @@ Deleted records in PlusVibe get `deleted_from_source_at = NOW()` set in Postgres
 
 ## Deploy Flow
 
-**RULE: Edit files directly on VPS. Push to GitHub at end of session as backup.**
+**RULE: Always Local → GitHub → VPS. Never edit files directly on VPS.**
 
 ```bash
-# End of session — commit and push from VPS to GitHub
-ssh -i ~/.ssh/id_ed25519_hostinger root@72.61.143.225 "cd /root/outreach-sync && git add -A && git commit -m 'session sync' && git push origin main"
+# 1. Edit locally, commit and push
+git add -A && git commit -m "..." && git push origin main
+
+# 2. Deploy to VPS
+ssh -i ~/.ssh/id_ed25519_hostinger root@72.61.143.225 "cd /root/outreach-sync && git pull origin main"
 ```
 
 ## Running SSH Commands
