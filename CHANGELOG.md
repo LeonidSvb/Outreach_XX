@@ -8,6 +8,30 @@
 
 ---
 
+## [0.7.0] - 2026-03-21 - Email Threads + Zoho CRM Full Integration
+
+### Added
+- **`scripts/zoho/sync.js`** — обогащение контакта: city, country, LinkedIn, website, tags (JOIN через account_tags), sending account, label, source=PlusVibe
+- **`emails` таблица** — хранит все письма из PlusVibe (id, thread_id, direction IN/OUT, lead_email, from_email, sending_account, subject, body_text, label, sent_at, source, zoho_note_id)
+- **`scripts/sync/emails.js`** — два экспорта: `backfillEmails()` (бэкфилл через /unibox/emails), `syncRecentEmails()` (safety net последние 48h)
+- **`n8n/positive-reply-crm.json`** — N8N workflow: PlusVibe ALL_EMAIL_REPLIES webhook → PostgreSQL emails → Zoho Note
+- PlusVibe webhook `ALL_EMAIL_REPLIES` зарегистрирован (ignore_ooo, ignore_automatic)
+- Cron: `node scripts/index.js emails` ежедневно в 02:00 (safety net)
+
+### Changed
+- `leads` таблица: добавлена колонка `zoho_contact_id VARCHAR(50)` — деdup и ссылка на Zoho Contact
+- Zoho Contact Description: Source, Campaign, Sending account, Label, Tags, LinkedIn, Website, PlusVibe ID
+- `scripts/index.js`: добавлены args `zoho`, `emails`, `emails_backfill`, `daily_stats`
+- Deploy flow: Local → GitHub → VPS git pull (никогда не редактировать напрямую на VPS)
+- Все скрипты: однострочный комментарий-описание в начале файла
+
+### Notes
+- Бэкфилл: 416 писем из unibox (только OUT — ручные/авто ответы из inbox)
+- 14k campaign sends не доступны через unibox API — только агрегаты в campaign_stats
+- Входящие ответы лидов теперь пишутся через webhook ALL_EMAIL_REPLIES в реальном времени
+
+---
+
 ## [0.6.0] - 2026-03-21 - Daily Stats + Metabase Dashboard Foundation
 
 ### Added

@@ -28,7 +28,10 @@ Goal: single source of truth that survives lead deletions, enables cross-campaig
 - `docs/plusvibe-api.md` — verified PlusVibe API paths (official docs are often wrong)
 - `scripts/index.js` — sync entry point (campaigns/accounts/leads/stats/tags/zoho)
 - `scripts/sync/` — PlusVibe sync modules per entity
-- `scripts/zoho/sync.js` — Zoho CRM sync (positive reply leads → Contacts)
+- `scripts/zoho/sync.js` — Zoho CRM sync (positive reply leads → Contacts with city/country/LinkedIn/tags)
+- `scripts/sync/emails.js` — email sync: `backfillEmails()` + `syncRecentEmails()` (last 48h)
+- `scripts/sync/daily_stats.js` — per-day campaign stats: `backfillDailyStats()` + `syncYesterdayDailyStats()`
+- `n8n/positive-reply-crm.json` — N8N workflow: ALL_EMAIL_REPLIES webhook → PostgreSQL emails → Zoho Note
 - `scripts/notifications/` — Telegram daily report + alerts
 - `/root/docker-compose.yml` — full stack config on VPS
 
@@ -50,7 +53,8 @@ Goal: single source of truth that survives lead deletions, enables cross-campaig
 | campaign_stats | Daily snapshot (ON CONFLICT DO UPDATE) | Per campaign per day |
 | warmup_stats | Daily snapshot | Workspace-level |
 | lead_status_counts | Append-only snapshots | Hourly counts |
-| emails | Real-time via N8N webhook | FIRST_EMAIL_REPLIES event |
+| emails | N8N webhook (real-time) + unibox API (daily safety net) | ALL_EMAIL_REPLIES → webhook; `/unibox/emails` → daily 02:00 |
+| campaign_stats_daily | Daily per-campaign activity (not cumulative) | Cron 01:30 — needed for time-series charts |
 
 ## Soft Delete Pattern
 
@@ -87,6 +91,17 @@ crontab -l
 tail -50 /var/log/outreach-sync.log
 tail -20 /var/log/outreach-notify.log
 ```
+
+## N8N Workflows
+
+| Workflow | ID | Trigger | Action |
+|----------|----|---------|--------|
+| Positive reply - crm | `xOP4Sh9EHSuOW9mO` | PlusVibe ALL_EMAIL_REPLIES webhook | Save email to PostgreSQL, create Note in Zoho |
+| Daily report | — | Schedule | SSH → Node.js report script → Telegram |
+
+- Webhook URL: `https://n8n.srv1133622.hstgr.cloud/webhook/plusvibe-all-replies`
+- PlusVibe webhook registered: ALL_EMAIL_REPLIES (ignore_ooo=true, ignore_automatic=true)
+- N8N Community Edition: Schedule workflows cannot be triggered via REST API (405) — use webhook trigger or MCP
 
 ## Zoho CRM
 
