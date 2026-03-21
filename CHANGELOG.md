@@ -6,12 +6,43 @@
 
 ## [Unreleased]
 
+### Added
+- **NocoDB** подключён к базе `outreach` на VPS — UI для просмотра и управления данными
+  - URL: `https://nocodb.srv1133622.hstgr.cloud`
+  - Видимые таблицы: campaigns, leads, emails, email_accounts, campaign_stats, campaign_stats_daily, tags, warmup_stats, lead_status_counts, sync_log + все v_* views
+
+### Notes: NocoDB подключение (обход сложностей)
+Версия NocoDB 0.301.5 CE блокирует подключение к internal Docker hostname через `request-filtering-agent` (`allowPrivateIPAddress: false` по умолчанию). Переменная `NC_DISABLE_REQUEST_FILTER=true` в этой версии не работает (код обфусцирован).
+
+**Решение:** Патч напрямую в контейнере:
+```bash
+docker exec root-nocodb-1 sed -i \
+  -e '7s/allowPrivateIPAddress: false/allowPrivateIPAddress: true/' \
+  -e '188s/allowPrivateIPAddress !== undefined ? options.allowPrivateIPAddress : false/allowPrivateIPAddress !== undefined ? options.allowPrivateIPAddress : true/' \
+  /usr/src/app/node_modules/request-filtering-agent/lib/request-filtering-agent.js
+docker restart root-nocodb-1
+```
+**Внимание:** патч слетает при `docker pull` / пересборке контейнера — нужно повторить.
+
+После подключения через UI (Settings → Data Sources → Add Data Source):
+- Connection: выбрать сохранённый `outreach`
+- Database: вписать `outreach` вручную (не выбирать из дропдауна)
+- Schema: `public`
+
+NocoDB тянет все таблицы включая `nc_*` внутренние. Скрытие через прямой UPDATE в PostgreSQL:
+```sql
+UPDATE nc_models_v2 SET enabled = false
+WHERE table_name LIKE 'nc_%' OR table_name LIKE 'xc_%'
+   OR table_name IN ('workspace', 'workspace_user', 'notification');
+```
+
 ### Planned
+- Lead Warehouse: создать таблицы `leads_master`, `leads_enrichment`, `lead_events`
+- 5000 лидов (рекрутинг США): импорт CSV → валидация email (MillionVerifier) → загрузка в PlusVibe
 - Zoho CRM: проверить маппинг всех полей контакта (city, country, LinkedIn, tags)
 - N8N webhook ALL_EMAIL_REPLIES: протестировать передачу body_text письма → PostgreSQL emails → Zoho Note
 - `scripts/zoho/sync.js`: доработать по результатам тестов webhook
 - Metabase: дашборд — reply rate, positive rate, pipeline по статусам, emails view
-- Анализ всех реплаев за всё время из PostgreSQL
 - Автореплаер на PlusVibe: follow-up при получении ответа (через N8N или встроенный)
 - Cal.com: решить — синк в PostgreSQL или прямая интеграция в Zoho CRM
 - Zoho: нуртуринг sequences, pipeline stages, автоматизации
