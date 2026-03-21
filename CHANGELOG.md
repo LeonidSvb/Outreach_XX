@@ -41,6 +41,12 @@
   - `syncYesterdayDailyStats()` — daily cron function, writes yesterday's activity for all campaigns
 - **Cron** — `30 1 * * *`: `node scripts/index.js daily_stats` (runs after campaign_stats snapshot at 01:00)
 - **`scripts/index.js`** — added `daily_stats` arg and `syncYesterdayDailyStats` import
+- **Metabase dashboard** (id=2) — created fully via Metabase REST API (`x-api-key`):
+  - 3 tabs: Overview / Campaigns / Deliverability
+  - Tab 1: 4 KPI scalars (Contacted, Reply Rate, Positive Rate, Bounce Rate) + 2 charts (Daily Emails Sent bar, Daily Replies & Bounces line)
+  - Tab 2: Campaigns table with rates
+  - Tab 3: Domain deliverability + Account health summary + Lead pipeline
+  - Date filter (`date/all-options`, default `past30days`) mapped to both charts via field filter on `campaign_stats_daily.stat_date` (field id=362)
 
 ### Notes
 - Backfill result: 102 rows, 25 campaigns with activity, 2026-01-02 → 2026-03-20
