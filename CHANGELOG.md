@@ -36,16 +36,15 @@ WHERE table_name LIKE 'nc_%' OR table_name LIKE 'xc_%'
    OR table_name IN ('workspace', 'workspace_user', 'notification');
 ```
 
+### Changed
+- `leads` таблица: добавлены колонки `enrichment JSONB` и `source VARCHAR(50)` (migration: `db/migrations/2026-03-22-add-leads-enrichment-source.sql`)
+
 ### Planned
-- Lead Warehouse: создать таблицы `leads_master`, `leads_enrichment`, `lead_events`
-- 5000 лидов (рекрутинг США): импорт CSV → валидация email (MillionVerifier) → загрузка в PlusVibe
-- Zoho CRM: проверить маппинг всех полей контакта (city, country, LinkedIn, tags)
-- N8N webhook ALL_EMAIL_REPLIES: протестировать передачу body_text письма → PostgreSQL emails → Zoho Note
-- `scripts/zoho/sync.js`: доработать по результатам тестов webhook
-- Metabase: дашборд — reply rate, positive rate, pipeline по статусам, emails view
-- Автореплаер на PlusVibe: follow-up при получении ответа (через N8N или встроенный)
-- Cal.com: решить — синк в PostgreSQL или прямая интеграция в Zoho CRM
-- Zoho: нуртуринг sequences, pipeline stages, автоматизации
+- Zoho CRM: проверить маппинг полей (city, country, LinkedIn, tags) + тест webhook body_text → Zoho Note
+- `scripts/zoho/sync.js`: доработать по результатам тестов
+- Metabase: дашборд — reply rate, positive rate, pipeline по статусам
+- Cal.com: решить интеграцию
+- Zoho: нуртуринг sequences, pipeline stages
 
 ---
 
