@@ -26,8 +26,10 @@ Goal: single source of truth that survives lead deletions, enables cross-campaig
 - `.env` — all credentials (gitignored, never commit)
 - `.env.example` — template without secrets
 - `docs/plusvibe-api.md` — verified PlusVibe API paths (official docs are often wrong)
-- `/root/outreach-sync/src/index.js` — sync entry point on VPS
-- `/root/outreach-sync/src/sync/` — sync modules per entity
+- `scripts/index.js` — sync entry point (campaigns/accounts/leads/stats/tags/zoho)
+- `scripts/sync/` — PlusVibe sync modules per entity
+- `scripts/zoho/sync.js` — Zoho CRM sync (positive reply leads → Contacts)
+- `scripts/notifications/` — Telegram daily report + alerts
 - `/root/docker-compose.yml` — full stack config on VPS
 
 ## PlusVibe API — Critical Notes
@@ -54,6 +56,14 @@ Goal: single source of truth that survives lead deletions, enables cross-campaig
 
 Deleted records in PlusVibe get `deleted_from_source_at = NOW()` set in Postgres. Data is never physically deleted — this is the whole point.
 
+## Deploy Flow
+
+```bash
+# Local → GitHub → VPS
+git push origin main
+ssh -i ~/.ssh/id_ed25519_hostinger root@72.61.143.225 "cd /root/outreach-sync && git pull origin main"
+```
+
 ## Running SSH Commands
 
 ```bash
@@ -63,9 +73,24 @@ ssh -i ~/.ssh/id_ed25519_hostinger -o StrictHostKeyChecking=no root@72.61.143.22
 ## Checking Sync
 
 ```bash
-# On VPS
+# Sync log
 docker exec root-postgres-1 psql -U n8n -d outreach -c "SELECT sync_type, records_upserted, status, started_at FROM sync_log ORDER BY id DESC LIMIT 10;"
+
+# Cron schedule
+crontab -l
+
+# Live logs
+tail -50 /var/log/outreach-sync.log
+tail -20 /var/log/outreach-notify.log
 ```
+
+## Zoho CRM
+
+- OAuth app: Server-based, data center `.com`
+- Redirect URI: `https://www.zohocorp.com/home.html`
+- Scope: `ZohoCRM.modules.ALL,ZohoCRM.settings.READ`
+- Syncs leads WHERE status=REPLIED AND label IN (INTERESTED, MEETING_BOOKED, MEETING_COMPLETED)
+- Deduplication: `zoho_contact_id IS NULL` + Zoho duplicate_check_fields by Email
 
 ## Metabase Connection (when asked to add DB)
 

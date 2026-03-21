@@ -8,6 +8,28 @@
 
 ---
 
+## [0.6.0] - 2026-03-21 - Zoho CRM Integration
+
+### Added
+- **`scripts/zoho/sync.js`** — syncs positive reply leads to Zoho CRM Contacts
+- **`scripts/sync/daily_stats.js`** — daily per-campaign stats backfill
+- `leads.zoho_contact_id VARCHAR(50)` — column added to track sync state and prevent duplicates
+- Zoho OAuth tokens stored in `.env` (ZOHO_CLIENT_ID/SECRET/REFRESH_TOKEN/ACCESS_TOKEN)
+- `.env.example` updated with Zoho variables
+
+### Changed
+- **Deploy flow**: VPS `/root/outreach-sync/` is now a git repo pointing to GitHub — deploy via `git pull origin main`
+- **Cron paths**: updated from `src/` to `scripts/` to match repo structure
+- `scripts/index.js` — added `zoho` as sync target, runs after warmup in full sync
+- Zoho Contact `Description` field includes: campaign name, sending account, label, PlusVibe ID
+
+### Notes
+- 31 existing positive reply leads synced to Zoho on first run
+- Deduplication: `zoho_contact_id IS NULL` in PostgreSQL + `duplicate_check_fields: [Email]` in Zoho API
+- Cron: `node scripts/index.js zoho` runs hourly
+
+---
+
 ## [0.5.0] - 2026-03-20 - N8N Migration SQLite → PostgreSQL
 
 ### Changed
