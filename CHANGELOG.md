@@ -6,6 +6,16 @@
 
 ## [Unreleased]
 
+### Planned
+- Zoho CRM: проверить маппинг всех полей контакта (city, country, LinkedIn, tags)
+- N8N webhook ALL_EMAIL_REPLIES: протестировать передачу body_text письма → PostgreSQL emails → Zoho Note
+- `scripts/zoho/sync.js`: доработать по результатам тестов webhook
+- Metabase: дашборд — reply rate, positive rate, pipeline по статусам, emails view
+- Анализ всех реплаев за всё время из PostgreSQL
+- Автореплаер на PlusVibe: follow-up при получении ответа (через N8N или встроенный)
+- Cal.com: решить — синк в PostgreSQL или прямая интеграция в Zoho CRM
+- Zoho: нуртуринг sequences, pipeline stages, автоматизации
+
 ---
 
 ## [0.7.0] - 2026-03-21 - Email Threads + Zoho CRM Full Integration
