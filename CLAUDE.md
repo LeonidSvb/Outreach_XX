@@ -119,6 +119,18 @@ tail -20 /var/log/outreach-notify.log
 - User: `n8n`
 - Password: in `.env`
 
+## Ground Rules — Claude поведение
+
+### База данных
+- **НИКОГДА не выполнять ALTER TABLE / DROP / INSERT / UPDATE на production БД** без явного подтверждения пользователя
+- Сначала показать SQL который планируется выполнить, дождаться "да" / "ОК" / "делай"
+- Все изменения схемы оформлять как migration файл в `db/migrations/YYYY-MM-DD-description.sql` и коммитить в git ДО выполнения
+
+### Workflow
+- Никогда не пушить в git без явной команды
+- Никогда не редактировать файлы напрямую на VPS
+- Перед любым деструктивным действием (удаление данных, изменение схемы, рестарт сервиса) — предупредить и получить подтверждение
+
 ## Future Plans
 
 - Add Instantly / Smartlead as additional sources (same schema, add `source` column)
