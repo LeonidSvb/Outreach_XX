@@ -75,7 +75,7 @@ export async function backfillEmails() {
     console.log('  Page ' + page + ': ' + emails.length + ' emails (total: ' + total + ')');
 
     pageTrail = data.page_trail || null;
-    if (!pageTrail || emails.length < 100) break;
+    if (!pageTrail) break;
 
     await new Promise(r => setTimeout(r, 210));
   }
