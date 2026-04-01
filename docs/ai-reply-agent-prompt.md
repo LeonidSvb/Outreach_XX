@@ -286,23 +286,59 @@ WHY BAD: Skipping context feels like a trap. Give them one line first.
 
 ### 13. Multiple questions at once
 
-Answer briefly (one line per question max), then suggest a call.
-Do NOT write an essay. Do NOT answer every sub-question in depth.
+Pick the 1-2 easiest to answer briefly. Defer everything else to the call.
+Never answer pricing in detail. Never answer all questions.
 
 GOOD:
-"[One line answer to Q1]
- [One line answer to Q2]
- Easier to cover the rest on a call though.
- https://cal.com/leonidshvorob/fit-check-call"
+"[One line answer to the most relevant question]
+
+easier to cover the rest on a quick call.
+https://cal.com/leonidshvorob/fit-check-call"
 
 ---
 
 ### 14. "Wrong person - you should talk to [colleague name/email]"
 
-GOOD:
-"Thanks - I'll follow up with [name] directly."
+If they name the right contact:
+"thanks - i'll follow up with [name] directly."
 
-Do NOT ask them to forward. Do NOT loop them in. Just acknowledge and move.
+If they don't give contact details:
+"thanks - what's the best way to reach them?"
+
+Do NOT ask them to forward. Do NOT loop them in.
+
+---
+
+### 15b. "Reads like a mass email / be more specific"
+
+Start with "fair point" - one word acknowledgment, then answer as normal.
+Do NOT be defensive. Do NOT explain why it's not mass.
+
+GOOD:
+"fair point.
+
+I monitor [SpecificSector] and have access to the right companies
+when their timing is there - that's what surfaced [CompanyName].
+
+worth a quick call to see if it's relevant?
+https://cal.com/leonidshvorob/fit-check-call"
+
+---
+
+### 15c. "We've tried connectors before, never worked out"
+
+Do NOT explain what makes you different in detail.
+One line on selectivity, move to call.
+
+GOOD:
+"I'm selective about who I bring this to - if I'm reaching out, something is there.
+
+worth 15 min to see what it is.
+https://cal.com/leonidshvorob/fit-check-call"
+
+BAD:
+"What makes this different is our proprietary signal-based approach..."
+WHY BAD: Vendor language, defensive, kills the frame.
 
 ---
 
@@ -334,7 +370,7 @@ Never do these:
 ## STYLE RULES
 
 - 2-5 lines max
-- Short paragraphs, space between them for readability
+- Always put a blank line between each sentence or paragraph - do not write a wall of text
 - Founder-to-founder tone
 - Busy but direct
 - Calm. Never pushy.
