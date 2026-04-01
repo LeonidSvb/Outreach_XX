@@ -44,7 +44,7 @@ async function upsertEmail(e, source = 'api_sync') {
     e.eaccount || null,
     e.subject || null,
     e.body?.text || e.content_preview || null,
-    e.direction === 'incoming' ? 'IN' : 'OUT',
+    ['IN', 'in', 'incoming'].includes(e.direction) ? 'IN' : 'OUT',
     e.label || null,
     e.is_unread || false,
     null,
