@@ -81,65 +81,152 @@ No commitment beyond that.
 
 ## Part 2 — Bad Patterns: What Killed the Conversation
 
+> Note: our outbound replies have empty body_text in DB. Bad replies below are reconstructed from lead's NEXT message - their reaction is the evidence.
+
 ### Pattern 2A — Over-Explaining Killed the Vibe
 
-**What happened:** Lead asked "what do you do?" or "tell me more" — we probably sent a long explanation — they said "I'll pass."
+**Thread: m@searchwithjack.com**
+- Lead: "Could you send more info, thanks"
+- Lead (after our reply): "Thanks for the context, Aria! I'll pass, thanks." then "Unsubscribe please"
 
-**Real examples:**
-- m@searchwithjack.com: "Could you send more info, thanks" → our reply → "Thanks for the context, Aria! I'll pass, thanks." → then "Unsubscribe please"
-- slabat@dssstaffing.com: "I looked at your website this morning and it didn't come up. Can you tell me what your company does." → our reply → "Not interested. thanks"
-- markherman@sympl.be: "i literally have no idea what you mean with that" → our reply → "no need at this stage, tx"
+What our reply probably looked like:
+> "Hi M, thanks for your interest! We're a B2B connector company that helps staffing agencies
+> find new clients through our targeted outreach approach. Here's how it works: we identify
+> relevant hiring signals in your sector, map the right decision makers, and run targeted
+> sequences to start conversations on your behalf. Our process typically involves..."
 
-**What went wrong:** The explanation sounded like a vendor pitch. When you explain too much, you stop sounding like a connector and start sounding like someone selling a service. The Axis Mundi positioning breaks the moment you start justifying yourself.
+Why it failed: "our process" + step-by-step explanation = vendor pitch mode.
+Connector frame collapses the moment you start explaining a service structure.
 
-**Fix:** Never explain more than 2 sentences. Never use "our platform", "our service", "our process". Stay in connector frame.
+Better reply:
+> I monitor this sector and surface connections when timing lines up on both sides.
+>
+> Worth a 15-min call to see if what I'm seeing is relevant for you?
+> https://cal.com/leonidshvorob/fit-check-call
+
+---
+
+**Thread: slabat@dssstaffing.com**
+- Lead: "I looked at your website this morning and it didn't come up. Can you tell me what your company does."
+- Lead (after our reply): "Not interested. thanks"
+
+What our reply probably looked like:
+> "Hi Scott! The domain I reach out from is separate from our main website, my apologies
+> for the confusion. We help staffing companies connect with companies that are actively
+> hiring. Our platform identifies hiring intent signals and routes introductions..."
+
+Why it failed: defensive about the website AND switched into vendor pitch in the same reply.
+Two problems, neither solved.
+
+Better reply:
+> Good catch - the sending domain isn't the main one, my mistake.
+>
+> I monitor the staffing sector and surface connections when timing is there.
+> Worth a quick call?
+> https://cal.com/leonidshvorob/fit-check-call
+
+---
+
+**Thread: markherman@sympl.be**
+- Lead: "i literally have no idea what you mean with that... I am afraid your AI mailing tool needs finetuning"
+- Lead (after 2 of our replies): "no need at this stage, tx"
+
+Why it failed: they called it an AI tool after seeing our REPLY - meaning our reply felt templated/automated.
+Two more replies made it worse. The hole gets deeper the more you explain.
+
+Better reply (one shot):
+> Real person - sympl came up on my radar in this sector, that's why I sent the note.
+>
+> I monitor who's looking for what you do and surface the timing.
+> 15 min if curious. https://cal.com/leonidshvorob/fit-check-call
+
+Rule: If they're confused, simplify once and move to a call. Never explain twice.
 
 ---
 
 ### Pattern 2B — Credibility Check Not Handled Right
 
-**What happened:** Lead questioned whether the connections were real.
+**Thread: jvines@pursuitsalessolutions.com**
+- Lead (first): "Sure, feel free to put me on an intro email with them." [positive start]
+- Lead (after our reply): "Can you share what an engagement looks like? And also, do you have active relationships with these VPs?"
+- Result: 4 of our replies, still ended NOT_INTERESTED
 
-**Real examples:**
-- jvines@pursuitsalessolutions.com: "Can you share what an engagement looks like? And also, do you have active relationships with these VPs?" → our_replies: 4, they stayed NOT_INTERESTED
-- matt.ellis@engagepartners.co.uk: "In what professional capacity do you interact with senior leadership? Can you send me your LinkedIn profile? Do you act on behalf of any education recruitment agencies right now?" → thread went cold
-- matthias@linguedo.com: "That's very vague, especially given you contacted me illegally. So please let me know to whom you're connected and how good the connection is" → cold
+Why it failed: they asked one sharp question, we took 4 rounds to answer it.
+More rounds = less confidence. A connector answers in one line and moves to the call.
+Also: "do you have active relationships" is a credibility test, not an info request.
+Trying to prove it by explaining = failed the test.
 
-**What went wrong:** When challenged, we probably either over-explained or sent proof that wasn't specific enough. Connector frame requires specificity without defensiveness.
+Better reply:
+> I monitor this sector and have access to the right people when their timing is there.
+>
+> The call is where I'd pull up what's specific to your pipeline - easier to show than explain.
+> https://cal.com/leonidshvorob/fit-check-call
 
-**Fix:** Never defend. Name something specific. Short answer.
-
-**AI Template — Category: "Are your connections real? / Do you have active relationships?"**
-```
-The names I'm sitting on are specific to [their vertical].
-
-If they're not relevant in the first 10 minutes of the call, 
-say so and we're done.
-
-[Calendly link]
-```
-Confidence, not proof. "Say so and we're done" removes all pressure and actually increases trust.
+Rule: Never prove. Redirect. The call is the proof.
 
 ---
 
-### Pattern 2C — "Is This Automated?" — Authenticity Challenged
+**Thread: matt.ellis@engagepartners.co.uk**
+- Lead (first): "Tell me more Leo..." [warm]
+- Lead (second): "In what professional capacity do you interact with senior leadership in a school? Can you send me your LinkedIn profile please? Do you act on behalf of any education recruitment agencies right now?"
+- Result: thread went cold
 
-**Real examples:**
-- mae@executivehunt.com: After explanation → "Is this automated? I haven't been anywhere"
-- markherman@sympl.be: "I am afraid your AI mailing tool needs finetuning"
+This was a professional credibility audit. Three questions at once = high intent but high skepticism.
+We probably either answered too vaguely (lost credibility) or too much (sounded defensive).
 
-**What went wrong:** Something in the reply triggered the automation suspicion. Likely: template language, no personal detail, too fast response.
+Better reply:
+> I'm independent - not representing any agencies, just monitoring the education sector
+> for timing signals.
+>
+> LinkedIn: [link]. Easier to walk you through the specifics on a call.
+> https://cal.com/leonidshvorob/fit-check-call
 
-**AI Template — Category: "Is this automated? / Are you real?"**
-```
-Real person, not a tool.
+Key: answer the LinkedIn ask directly (it's a legitimacy check, not optional), keep rest short.
 
-Came across [their company name] specifically — 
-that's why I sent the note.
+---
 
-If the timing's off, no issue. If not — [Calendly link]
-```
-The company name specificity is the proof. Don't say "I'm real" — show it.
+### Pattern 2C — Performance Objection Handled Wrong
+
+**Thread: mae@executivehunt.com**
+- Lead (first): "I don't understand what you are offering? Do you know companies that need recruitment services?"
+- Lead (second): "we would only pay once we have been paid from the client - happy to pay from the placement, however we would never pay something upfront"
+- Lead (third): "Is this automated? I haven't been anywhere"
+
+Three rounds ending in "is this automated" = they gave up and assumed it was a bot.
+Our first reply didn't land (too vendor), then we hit pricing, then they disengaged.
+
+Better sequence:
+
+Reply 1 to "I don't understand":
+> I monitor this sector and have access to companies looking for recruitment partners right now.
+> When timing lines up - I surface the intro.
+>
+> Worth a call to see if what I'm looking at is relevant for you?
+> https://cal.com/leonidshvorob/fit-check-call
+
+If they then raised the upfront objection (reply 2 only if needed):
+> Got it - I don't run this purely on success fee, but the entry point is small
+> and we figure out structure together after that.
+>
+> Call first though - need to see if the fit is even there.
+> https://cal.com/leonidshvorob/fit-check-call
+
+---
+
+**Thread: darren@spotwork.co**
+- Lead (first): "Close me a deal and I'll reward you handsomely"
+- Lead (after our reply): "Nothing upfront. I've tried this many times before and it never works in my industry."
+
+His first message was actually a yes with conditions - "close me a deal first."
+Our reply probably explained the pricing model in detail, which triggered the resistance.
+You can't win a pricing conversation by email.
+
+Better reply to "close me a deal":
+> I hear that - happy to walk you through the structure on a quick call.
+> The entry point is small, and after that we figure out what makes sense for both sides.
+> https://cal.com/leonidshvorob/fit-check-call
+
+Rule: Any pricing question = move to call immediately. Never negotiate by email.
 
 ---
 
@@ -181,33 +268,21 @@ One line. Nothing more. Then blocklist.
 
 **AI Template — Category: "Won't Pay Upfront"**
 ```
-Completely get it.
+Got it - I don't run this purely on success fee,
+but the entry point is small and the structure is flexible after that.
 
-Here's how I work with that: 
-
-Small entry point — covers 2–3 specific intros. 
-After that, pure success fee — you close them, we split.
-
-The entry point isn't payment for a service. 
-It's both of us putting skin in the game so neither side 
-wastes each other's time.
-
-If the first names aren't relevant, say so. Done.
-
-Worth looking at the names on a call?
-
-[Calendly link]
+Worth a call to see if the fit is even there first.
+https://cal.com/leonidshvorob/fit-check-call
 ```
 
 **If they push back again:**
 ```
-Fair. Some people need to see the names first.
-
-Quick call — I'll pull them up. You tell me if they're relevant 
-before we talk any numbers.
-
-[Calendly link]
+Makes sense - happy to walk you through how it works on a call.
+It's not a rigid structure, we figure out what works for both sides.
+https://cal.com/leonidshvorob/fit-check-call
 ```
+
+Rule: Never commit to a specific structure by email. "We figure it out together" = flexible AND moves to call.
 
 ---
 
@@ -224,18 +299,17 @@ before we talk any numbers.
 
 **AI Template — Category: "I don't understand what you're offering"**
 ```
-Simple version:
+Simple version -
 
-I'm in contact with [specific ICP — e.g. "HR directors in mid-market 
-manufacturing"] who are actively looking for [what they do].
+I monitor this sector and have access to companies looking for what you do
+when their timing is there. I surface the connection, you take it from there.
 
-I surface the connection — you take it from there.
-
-Worth 15 minutes to see if the names are relevant?
-
-[Calendly link]
+Worth 15 minutes to see if it lines up?
+https://cal.com/leonidshvorob/fit-check-call
 ```
-The key is naming their ICP specifically. Not "companies" — specific companies/roles.
+
+Key: no name-dropping, no system/platform language. "I monitor this sector, I have access" = connector.
+Details of how you find them = for the call only.
 
 ---
 
@@ -252,17 +326,17 @@ The key is naming their ICP specifically. Not "companies" — specific companies
 ```
 Fair.
 
-Quick written version:
+I monitor the [staffing/recruiting] sector and have access to companies
+when their timing is there. When it lines up with what you do - I surface it.
 
-I connect [their vertical] firms with [ICP that needs them].
-No pitch, no deck — I just route the intro.
+Small entry point to start, then we figure out structure together.
 
-The names I'm holding are relevant to [their company/sector].
-You decide if they're worth a call once you see them.
-
-Want me to drop 2–3 company names here so you can judge?
+If that lands - worth a call to see what I'm specifically looking at for you.
+https://cal.com/leonidshvorob/fit-check-call
 ```
-Offering to name-drop in writing often converts the "no calls" objector — because it's specific and low-commitment.
+
+Note: no name-dropping, no "company names by email." Give them the concept, not the goods.
+The goods are for the call.
 
 ---
 
