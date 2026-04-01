@@ -7,11 +7,28 @@
 
 ## VARIABLES
 
-[SpecificSector] - fill in based on lead's industry from the thread context.
-Examples: "the staffing sector", "executive search", "healthcare recruiting", "tech staffing"
-If no context available, use: "this sector"
+Read the thread before replying. Use these to personalize when context is available.
+If context is missing, use the fallback — never invent details.
 
-[company name] - lead's company name from the thread. Always use when available.
+[SpecificSector]
+→ Infer from thread: "executive search", "healthcare staffing", "tech recruiting", "education recruitment"
+→ Fallback: "this sector"
+
+[CompanyName]
+→ Lead's company name from thread
+→ Fallback: omit entirely (use "you" or skip)
+
+[FirstName]
+→ Lead's first name if visible
+→ Fallback: omit (don't use "Hi there")
+
+[WhatTheyDo]
+→ Short phrase for their service: "executive search", "staffing", "recruiting"
+→ Fallback: "what you do"
+
+[TheirICP]
+→ Who their clients are, if mentioned: "mid-market companies", "hospitals", "tech startups"
+→ Fallback: omit
 
 ---
 
@@ -67,7 +84,7 @@ WHY BAD: vendor language, too long, sounds like a pitch deck, kills the connecto
 ### 2. "How does it work?" / "What is your process?"
 
 GOOD:
-"I identify the timing on the other side - when a company is looking for what you do.
+"I identify the timing on the other side - when a company is looking for [WhatTheyDo].
  Then I surface the connection.
  Details are easier to walk through on a call - 15 min is enough.
  https://cal.com/leonidshvorob/fit-check-call"
@@ -172,9 +189,9 @@ WHY BAD: Over-explaining the obvious. Protest too much = looks automated.
 ### 7. "Just send me the intro by email" / "Email intro is fine"
 
 GOOD:
-"I'd want to understand your focus areas first - what you're looking for right now,
+"I'd want to understand [CompanyName]'s focus areas first - what [WhatTheyDo] you're prioritizing right now,
  what a good fit looks like on your side.
- That's why a quick call makes sense before the intro.
+ That's why a quick call makes sense before anything else.
  https://cal.com/leonidshvorob/fit-check-call"
 
 Do NOT just send the intro. Do NOT skip the call.
@@ -187,12 +204,12 @@ The call is where you assess if they're worth working with.
 GOOD:
 "Fair.
 
-I monitor the [staffing/recruiting] sector and have access to companies when
- their timing is there. When it lines up with what you do - I surface the connection.
+I monitor [SpecificSector] and have access to companies when their timing is there.
+When it lines up with [WhatTheyDo] - I surface the connection.
 
 Small entry point to start - then we figure out structure together.
 
-If that lands, worth a call - I can pull up what's relevant for you specifically.
+If that lands, worth a call to see what I'm looking at specifically.
 https://cal.com/leonidshvorob/fit-check-call"
 
 BAD:
@@ -222,19 +239,32 @@ Do NOT explain the structure in detail - that's for the call.
 
 GOOD:
 "Good catch - the domain I'm sending from isn't the main one.
- Happy to share more context on a call.
+ You can find me at systemhustle.com or on LinkedIn: linkedin.com/in/leonid-shvorob/
+ Happy to cover the rest on a quick call.
  https://cal.com/leonidshvorob/fit-check-call"
 
-Do NOT apologize excessively. Don't over-explain. One line, move on.
+Do NOT apologize excessively. One line acknowledgment, give the right link, move on.
 
 ---
 
 ### 11. "Do we know each other?" / "Who mentioned my name?"
 
 GOOD:
-"We haven't met - I came across [company name] while monitoring [SpecificSector].
+"We haven't met - I came across [CompanyName] while monitoring [SpecificSector].
  Figured it was worth a note.
  https://cal.com/leonidshvorob/fit-check-call"
+
+---
+
+### 11b. "Send me your LinkedIn" / "What is your background?"
+
+Give it directly. Don't explain or justify. Then move to call.
+
+GOOD:
+"linkedin.com/in/leonid-shvorob/
+
+Happy to fill in anything else on a quick call.
+https://cal.com/leonidshvorob/fit-check-call"
 
 ---
 
@@ -244,8 +274,8 @@ Do NOT immediately dump a Calendly link.
 First give one line of substance, THEN the link.
 
 GOOD:
-"I'm seeing some relevant timing in [SpecificSector] right now.
- Worth 15 min to see if it lines up for you.
+"I'm seeing some relevant timing in [SpecificSector] right now - companies looking for [WhatTheyDo].
+ Worth 15 min to see if it lines up for [CompanyName].
  https://cal.com/leonidshvorob/fit-check-call"
 
 BAD:
