@@ -126,7 +126,7 @@
 | GET | `/unibox/emails` | query: `email_type` (all/received/sent), `lead`, `campaign_id`, `label`, `page_trail` | `{page_trail, data: [{id, direction, subject, body, label, lead, campaign_id, thread_id, eaccount, timestamp_created}]}` |
 | GET | `/unibox/other-emails` | query: `page_trail` | `{page_trail, data: []}` |
 | GET | `/unibox/emails/count/unread` | — | `{count}` |
-| GET | `/unibox/campaign-emails` | query: `lead` (req, email), `campaign_id` | история переписки с лидом |
+| GET | `/unibox/campaign-emails` | query: `lead` (req, email), `campaign_id` (opt) | возвращает исходящие step-письма из кампании для лида — включая точный body холодного письма, step номер, дату отправки, вариант (A/B), sending account |
 | POST | `/unibox/emails/reply` | query: `workspace_id`, body: `reply_to_id`, `subject`, `from`, `to`, `body` (HTML) | `{status, id}` |
 | POST | `/unibox/emails/forward` | query: `workspace_id`, body: `from`, `to`, `reply_to_id`, `body` | `{status, id}` |
 | POST | `/unibox/emails/compose` | query: `workspace_id`, body: `lead_id`, `camp_id`, `subject`, `from`, `body` | `{status, id}` |
@@ -136,6 +136,15 @@
 | DELETE | `/unibox/emails/delete` | body: `message_id` | `{status}` |
 
 **Поля email-объекта:** `id`, `direction` (IN/OUT), `message_id`, `is_unread`, `lead_id`, `campaign_id`, `from_address_email`, `to_address_json`, `subject`, `body` (html + text), `content_preview`, `thread_id`, `eaccount`, `label` (OUT_OF_OFFICE/INTERESTED/etc), `source_modified_at`
+
+**Поля campaign-emails объекта:** `id`, `lead_id`, `lead` (email), `campaign_id`, `current_step` (номер шага), `sent_on`, `variation` (A/B), `message_id`, `subject`, `body` (plain text холодного письма), `is_text`, `eaccount` (sending account)
+
+**Использование campaign-emails для copy analysis:**
+- Позволяет вытащить точный текст холодного письма для любого лида
+- Можно батчем пройти по всем INTERESTED/NOT_INTERESTED лидам из БД
+- Сопоставить body письма с outcome (label) → понять какая копи конвертит
+- Пример: `GET /unibox/campaign-emails?workspace_id=WS&lead=email@domain.com`
+- Проверено: возвращает step 1 письмо, campaign_id опционален
 
 ---
 

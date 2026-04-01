@@ -1,0 +1,107 @@
+ПЛАН СЛЕДУЮЩЕЙ СЕССИИ
+=====================
+
+ЦЕЛЬ: понять какая копи конвертит, починить pain lines, настроить систему актуальных сигналов
+
+
+---
+
+1. АНАЛИЗ КОПИ — что сработало vs что не сработало
+----------------------------------------------------
+
+Endpoint готов: GET /unibox/campaign-emails?workspace_id=WS&lead={email}
+Возвращает точный текст холодного письма для каждого лида.
+
+Задача:
+- Батч-пулл cold email body для всех INTERESTED лидов из БД
+- Батч-пулл cold email body для всех NOT_INTERESTED лидов
+- Сравнить: какой промпт (Prompt #1-6), какой opener, какая pain line
+- Выявить паттерны: что конкретно писалось тем кто ответил позитивно
+
+Почему важно: у нас есть ~36 INTERESTED и ~83 NOT_INTERESTED с реплаями —
+достаточно чтобы увидеть статистически что работает.
+
+
+---
+
+2. ВЫГРУЗКА И САНИТАРНЫЙ ЧЕК ВСЕХ ТЕКУЩИХ КОПИ
+------------------------------------------------
+
+Вытащить тексты всех активных кампаний из PlusVibe.
+Пройтись по каждому письму и проверить:
+- Нет ли фактически неверных pain lines (как с quality engineers)
+- Нет ли "signal", "deal flow", "plug you into" где не надо
+- Нет ли overclaiming ("I'm around X daily" без подтверждения)
+- Соответствует ли pain реальному рынку ниши
+
+
+---
+
+3. ДЕЛЕНИЕ НА ПОДНИШИ
+----------------------
+
+Определить 4-5 основных подниш и прописать для каждой реальные pain lines:
+
+Healthcare staffing     — nurse shortage, travel nurses, licensing delays, burnout
+Manufacturing/Industrial — volume, turnover, seasonal spikes (Q4 production push)
+Tech staffing           — текущее состояние рынка (oversupply junior, shortage senior)
+Executive search        — wrong cultural fit, long cycle, confidentiality
+Finance/Accounting      — audit season (Q1-Q2), budget cycles, нишевые сертификации
+
+Для каждой подниши: 3-5 pain lines основанных на реальных источниках.
+
+
+---
+
+4. EXA AI ПАЙПЛАЙН — актуальные pain lines с сезонностью
+---------------------------------------------------------
+
+Exa AI умеет искать семантически — находит реальные жалобы hiring managers
+в LinkedIn постах, Reddit, отраслевых статьях.
+
+Пример запроса: "hiring managers in healthcare staffing complaining Q2 2026"
+
+Пайплайн:
+  Exa search (ежемесячно по каждой подниши)
+      ↓
+  Извлечь реальные жалобы своими словами
+      ↓
+  Отформатировать в SSM шаблон (Prompt #1-6)
+      ↓
+  Обновить копи кампаний
+
+Сезонные триггеры:
+  Январь-Март   → Healthcare (flu season), Finance (audit season)
+  Q2 (Апрель)   → Manufacturing рамп, новые бюджеты
+  Q3             → Mid-year hiring review
+  Q4             → Manufacturing year-end push, holiday coverage scramble
+
+Важно: pain lines должны говорить про PROCESS и TIME боль —
+не про supply/demand конкретных ролей (это легко опровергнуть).
+  ХОРОШО: "they waste weeks going back and forth with agencies that don't pre-screen"
+  ПЛОХО:  "they can't find quality engineers" (проверяемое claim о рынке)
+
+
+---
+
+5. ПРОВЕРИТЬ ПОЛНЫЙ ТРЕД У ПОЗИТИВНЫХ
+--------------------------------------
+
+Для топ-10 INTERESTED/MEETING_COMPLETED лидов вытащить полный тред:
+  - /unibox/campaign-emails → что именно им написали (копи)
+  - /unibox/emails (by thread_id) → что они ответили
+
+Цель: понять не только КАКОЙ промпт сработал, но и КАК строился диалог
+после первого позитивного ответа — что именно закрыло на звонок.
+
+
+---
+
+ТЕХНИЧЕСКИЕ ЗАМЕТКИ
+-------------------
+
+- Endpoint для копи анализа: GET /unibox/campaign-emails (проверено 2026-04-02)
+- В БД есть lead_email + campaign_id для всех лидов с реплаями
+- direction bug исправлен: IN=250, OUT=215 в таблице emails
+- AI reply agent prompt: docs/ai-reply-agent-prompt.md (финальная версия)
+- Reply patterns analysis: docs/reply-patterns-analysis.md
