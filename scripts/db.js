@@ -6,9 +6,11 @@ import { resolve } from 'path';
 const envPath = resolve('/root/outreach-sync/.env');
 const env = Object.fromEntries(
   readFileSync(envPath, 'utf8').split('\n')
-    .filter(l => l && !l.startsWith('#'))
-    .map(l => l.split('=').map(s => s.trim()))
+    .filter(l => l && !l.startsWith('#') && l.includes('='))
+    .map(l => { const i = l.indexOf('='); return [l.slice(0,i).trim(), l.slice(i+1).trim()]; })
 );
+// Expose all .env vars to process.env so sync scripts can read API keys
+Object.assign(process.env, env);
 
 const pool = new pg.Pool({
   host: env.PGHOST,
