@@ -8,6 +8,7 @@ import { syncYesterdayDailyStats } from './sync/daily_stats.js';
 import { syncZoho } from './zoho/sync.js';
 import { syncRecentEmails, backfillEmails } from './sync/emails.js';
 import { syncCalcom } from './sync/calcom.js';
+import { syncFathom } from './sync/fathom.js';
 import pool from './db.js';
 
 const arg = process.argv[2];
@@ -37,6 +38,7 @@ try {
   else if (arg === 'emails') await syncRecentEmails();
   else if (arg === 'emails_backfill') await backfillEmails();
   else if (arg === 'calcom') await syncCalcom();
+  else if (arg === 'fathom') await syncFathom();
   else console.error(`Unknown: ${arg}`);
 } catch (e) {
   console.error('Sync failed:', e.message);
