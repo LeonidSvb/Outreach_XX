@@ -29,6 +29,12 @@ async function fetchAllBookings() {
   return bookings;
 }
 
+// Cal.com sometimes returns "0" for missing dates — treat as null
+function safeTs(v) {
+  if (!v || v === '0' || v === 0) return null;
+  return v;
+}
+
 export async function syncCalcom() {
   const startedAt = new Date();
   console.log('  Syncing Cal.com bookings...');
@@ -87,8 +93,8 @@ export async function syncCalcom() {
         b.eventTypeId || null,
         b.title || null,
         b.status || null,
-        b.startTime || null,
-        b.endTime || null,
+        safeTs(b.startTime),
+        safeTs(b.endTime),
         attendee.email || null,
         attendee.name  || null,
         attendee.timeZone || null,
@@ -100,7 +106,7 @@ export async function syncCalcom() {
         b.fromReschedule || null,
         b.cancelledBy   || null,
         b.rescheduledBy || null,
-        b.createdAt || null,
+        safeTs(b.createdAt),
       ]);
       upserted++;
     }
