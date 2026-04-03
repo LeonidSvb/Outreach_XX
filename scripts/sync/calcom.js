@@ -111,10 +111,10 @@ export async function syncCalcom() {
       upserted++;
     }
 
-    await logSync('calcom_bookings', upserted, 'ok', startedAt);
+    await logSync('calcom_bookings', startedAt, { upserted, status: 'success' });
     console.log(`  Cal.com: ${upserted} bookings upserted`);
   } catch (e) {
-    await logSync('calcom_bookings', 0, `error: ${e.message}`, startedAt);
+    await logSync('calcom_bookings', startedAt, { status: 'error', error: e.message });
     throw e;
   }
 }
