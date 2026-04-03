@@ -67,23 +67,41 @@
 | POST | `/lead/add` | body: `campaign_id`, `leads[]` + опции skip/resume | `{total_sent, leads_uploaded, duplicate_email_count, invalid_email_count, ...}` |
 | POST | `/lead/add-lead-in-subseq` | body: `subseq_id`, `parent_lead_ids[]` | `{status, inserted}` |
 | POST | `/lead/delete` | body: `delete_list[]`, `campaign_id?` | `{status}` |
-| POST | `/lead/data/update` | body: `email`, `variables{}` | `{status}` |
+| POST | `/lead/data/update` | body: `workspace_id`, `email`, `variables{}` | `{status, updated_leads_count}` |
 | POST | `/lead/update/status` | body: `campaign_id`, `email`, `new_status` (только "COMPLETED") | `{status}` |
 
 **Статусы лидов:** `NOT_CONTACTED`, `CONTACTED`, `COMPLETED`, `REPLIED`, `RESCHEDULED`, `UNSUBSCRIBED`, `BOUNCED`, `SKIPPED`
 
-**Реальные counts (весь workspace):**
-- NOT_CONTACTED: 8 406
-- CONTACTED: 1 670
-- COMPLETED: 2 570
-- REPLIED: 89
-- BOUNCED: 161
-- SKIPPED: 1 581
-
 **Полный объект лида содержит:**
-`_id`, `campaign_id`, `workspace_id`, `status`, `label`, `email`, `first_name`, `last_name`, `job_title`, `company_name`, `company_website`, `phone_number`, `linkedin_person_url`, `linkedin_company_url`, `city`, `country`, `email_acc_name`, `camp_name`, `sent_step`, `total_steps`, `replied_count`, `opened_count`, `last_sent_at`, `mx` (GOOGLE_WORKSPACE/MICROSOFT/etc), `notes`, `bounce_msg`, `created_at`, `modified_at`
+`_id`, `campaign_id`, `workspace_id`, `status`, `label`, `email`, `first_name`, `last_name`, `job_title`, `company_name`, `company_website`, `phone_number`, `linkedin_person_url`, `linkedin_company_url`, `city`, `country`, `state`, `address_line`, `country_code`, `department`, `industry`, `email_acc_name`, `camp_name`, `sent_step`, `total_steps`, `replied_count`, `opened_count`, `last_sent_at`, `mx` (GOOGLE_WORKSPACE/MICROSOFT365/REGULAR_ACCOUNT), `notes`, `bounce_msg`, `created_at`, `modified_at`
 
 **Lead labels:** `INTERESTED`, `NOT_INTERESTED`, `AUTOMATIC_REPLY`, `OUT_OF_OFFICE`, кастомные
+
+**`/lead/data/update` — custom variables (проверено 2026-04-03):**
+
+Нативные поля лида (`first_name`, `last_name`, `job_title`, `company_name`, `company_website`, `phone_number`, `linkedin_person_url`, `linkedin_company_url`, `city`, `country`, `state`, `address_line`, `country_code`, `department`, `industry`, `notes`) — обновляются напрямую.
+
+Любые другие ключи → сохраняются как custom variables с префиксом `custom_` в объекте лида. В шаблоне письма используются без префикса: `{{icebreaker}}`, `{{email_1}}` и т.д.
+
+```bash
+# Пример: обновить нативное поле + добавить custom variable
+curl -X POST "https://api.plusvibe.ai/api/v1/lead/data/update" \
+  -H "x-api-key: YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "workspace_id": "WS_ID",
+    "email": "lead@company.com",
+    "variables": {
+      "first_name": "John",
+      "icebreaker": "Saw your recent hire in Austin..."
+    }
+  }'
+# → {"status":"success","updated_leads_count":1}
+# → в lead_data появится: first_name="John", custom_icebreaker="Saw your recent..."
+# → в шаблоне: {{icebreaker}} (без префикса custom_)
+```
+
+**Важно:** имя переменной не должно начинаться с `_` — иначе получится двойной underscore в ключе (`custom__var`).
 
 ---
 
