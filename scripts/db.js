@@ -1,9 +1,19 @@
 // PostgreSQL connection pool, query helper, and sync logger.
 import pg from 'pg';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
+import { readFileSync, existsSync } from 'fs';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const envPath = resolve('/root/outreach-sync/.env');
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Try local project .env first, fall back to VPS path
+const envCandidates = [
+  resolve(__dirname, '../.env'),
+  resolve('/root/outreach-sync/.env'),
+];
+const envPath = envCandidates.find(p => existsSync(p));
+if (!envPath) throw new Error('No .env file found');
+
 const env = Object.fromEntries(
   readFileSync(envPath, 'utf8').split('\n')
     .filter(l => l && !l.startsWith('#') && l.includes('='))
@@ -13,11 +23,7 @@ const env = Object.fromEntries(
 Object.assign(process.env, env);
 
 const pool = new pg.Pool({
-  host: env.PGHOST,
-  port: parseInt(env.PGPORT),
-  database: env.PGDATABASE,
-  user: env.PGUSER,
-  password: env.PGPASSWORD,
+  connectionString: env.DATABASE_URL,
 });
 
 export async function query(sql, params) {

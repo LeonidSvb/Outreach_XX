@@ -10,6 +10,6 @@
     "sync:stats": "node src/index.js stats"
   },
   "dependencies": {
-    "pg": "^8.11.0"
+    "pg": "^8.20.0"
   }
 }

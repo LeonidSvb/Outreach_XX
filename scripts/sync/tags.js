@@ -1,15 +1,8 @@
 // Upserts tags list and account→tag assignments from PlusVibe.
 import { query, logSync } from '../db.js';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
-
-const env = Object.fromEntries(
-  readFileSync(resolve('/root/outreach-sync/.env'), 'utf8').split('\n')
-    .filter(l => l && !l.startsWith('#')).map(l => l.split('=').map(s => s.trim()))
-);
-const BASE = env.PLUSVIBE_BASE_URL;
-const KEY = env.PLUSVIBE_API_KEY;
-const WS = env.PLUSVIBE_WORKSPACE_ID;
+const BASE = process.env.PLUSVIBE_BASE_URL;
+const KEY = process.env.PLUSVIBE_API_KEY;
+const WS = process.env.PLUSVIBE_WORKSPACE_ID;
 const H = { 'x-api-key': KEY };
 
 async function get(path, params = {}) {

@@ -2,17 +2,9 @@
 // backfillEmails() — one-time full sync via /unibox/emails API.
 // syncRecentEmails() — daily safety net, syncs last 48h.
 import { query, logSync } from '../db.js';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
-
-const env = Object.fromEntries(
-  readFileSync(resolve('/root/outreach-sync/.env'), 'utf8').split('\n')
-    .filter(l => l && !l.startsWith('#'))
-    .map(l => { const i = l.indexOf('='); return [l.slice(0, i).trim(), l.slice(i + 1).trim()]; })
-);
-const BASE = env.PLUSVIBE_BASE_URL;
-const KEY = env.PLUSVIBE_API_KEY;
-const WS = env.PLUSVIBE_WORKSPACE_ID;
+const BASE = process.env.PLUSVIBE_BASE_URL;
+const KEY = process.env.PLUSVIBE_API_KEY;
+const WS = process.env.PLUSVIBE_WORKSPACE_ID;
 const HEADERS = { 'x-api-key': KEY };
 
 async function fetchEmailsPage(pageTrail = null) {

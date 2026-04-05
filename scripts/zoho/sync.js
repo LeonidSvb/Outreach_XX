@@ -1,19 +1,8 @@
 // Syncs positive reply leads (INTERESTED/MEETING_BOOKED/MEETING_COMPLETED) to Zoho CRM Contacts.
 // One-way. Dedup via zoho_contact_id in leads table + duplicate_check_fields by Email in Zoho.
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
 import https from 'https';
 import pool, { logSync } from '../db.js';
 
-const envPath = resolve('/root/outreach-sync/.env');
-const env = Object.fromEntries(
-  readFileSync(envPath, 'utf8').split('\n')
-    .filter(l => l && !l.startsWith('#'))
-    .map(l => {
-      const idx = l.indexOf('=');
-      return [l.slice(0, idx).trim(), l.slice(idx + 1).trim()];
-    })
-);
 
 function httpsPost(hostname, path, data, headers) {
   return new Promise((resolve, reject) => {
@@ -38,9 +27,9 @@ function httpsPost(hostname, path, data, headers) {
 async function getAccessToken() {
   const params = new URLSearchParams({
     grant_type: 'refresh_token',
-    client_id: env.ZOHO_CLIENT_ID,
-    client_secret: env.ZOHO_CLIENT_SECRET,
-    refresh_token: env.ZOHO_REFRESH_TOKEN,
+    client_id: process.env.ZOHO_CLIENT_ID,
+    client_secret: process.env.ZOHO_CLIENT_SECRET,
+    refresh_token: process.env.ZOHO_REFRESH_TOKEN,
   });
   const res = await httpsPost('accounts.zoho.com', '/oauth/v2/token', params.toString(), {
     'Content-Type': 'application/x-www-form-urlencoded'

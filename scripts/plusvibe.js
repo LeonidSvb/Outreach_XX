@@ -1,17 +1,7 @@
 // PlusVibe API client. Rate limit: 5 req/sec — always use 210ms delay in loops.
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
-
-const envPath = resolve('/root/outreach-sync/.env');
-const env = Object.fromEntries(
-  readFileSync(envPath, 'utf8').split('\n')
-    .filter(l => l && !l.startsWith('#'))
-    .map(l => l.split('=').map(s => s.trim()))
-);
-
-const BASE = env.PLUSVIBE_BASE_URL;
-const KEY = env.PLUSVIBE_API_KEY;
-const WS = env.PLUSVIBE_WORKSPACE_ID;
+const BASE = process.env.PLUSVIBE_BASE_URL;
+const KEY = process.env.PLUSVIBE_API_KEY;
+const WS = process.env.PLUSVIBE_WORKSPACE_ID;
 const HEADERS = { 'x-api-key': KEY, 'Content-Type': 'application/json' };
 
 async function get(path, params = {}) {
