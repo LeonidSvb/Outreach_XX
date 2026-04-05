@@ -4,7 +4,7 @@ import { syncEmailAccounts } from './sync/email_accounts.js';
 import { syncLeads } from './sync/leads.js';
 import { syncCampaignStats, syncWarmupStats, syncLeadStatusCounts } from './sync/stats.js';
 import { syncTags } from './sync/tags.js';
-import { syncYesterdayDailyStats } from './sync/daily_stats.js';
+import { syncYesterdayDailyStats, backfillDailyStats } from './sync/daily_stats.js';
 import { syncZoho } from './zoho/sync.js';
 import { syncRecentEmails, backfillEmails } from './sync/emails.js';
 import { syncCalcom } from './sync/calcom.js';
@@ -35,6 +35,7 @@ try {
   else if (arg === 'tags') await syncTags();
   else if (arg === 'zoho') await syncZoho();
   else if (arg === 'daily_stats') await syncYesterdayDailyStats();
+  else if (arg === 'daily_stats_backfill') await backfillDailyStats();
   else if (arg === 'emails') await syncRecentEmails();
   else if (arg === 'emails_backfill') await backfillEmails();
   else if (arg === 'calcom') await syncCalcom();

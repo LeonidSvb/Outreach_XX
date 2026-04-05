@@ -6,24 +6,23 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// Try local project .env first, fall back to VPS path
+// Load .env if available (local dev / VPS). On Railway, env vars are injected directly.
 const envCandidates = [
   resolve(__dirname, '../.env'),
   resolve('/root/outreach-sync/.env'),
 ];
 const envPath = envCandidates.find(p => existsSync(p));
-if (!envPath) throw new Error('No .env file found');
-
-const env = Object.fromEntries(
-  readFileSync(envPath, 'utf8').split('\n')
-    .filter(l => l && !l.startsWith('#') && l.includes('='))
-    .map(l => { const i = l.indexOf('='); return [l.slice(0,i).trim(), l.slice(i+1).trim()]; })
-);
-// Expose all .env vars to process.env so sync scripts can read API keys
-Object.assign(process.env, env);
+if (envPath) {
+  const parsed = Object.fromEntries(
+    readFileSync(envPath, 'utf8').split('\n')
+      .filter(l => l && !l.startsWith('#') && l.includes('='))
+      .map(l => { const i = l.indexOf('='); return [l.slice(0,i).trim(), l.slice(i+1).trim()]; })
+  );
+  Object.assign(process.env, parsed);
+}
 
 const pool = new pg.Pool({
-  connectionString: env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL,
 });
 
 export async function query(sql, params) {

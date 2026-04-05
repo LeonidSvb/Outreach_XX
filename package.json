@@ -1,0 +1,12 @@
+{
+  "name": "outreach-xx",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/scheduler.js"
+  },
+  "dependencies": {
+    "node-cron": "^3.0.3",
+    "pg": "^8.20.0"
+  }
+}
